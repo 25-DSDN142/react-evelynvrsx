@@ -1,6 +1,8 @@
+let bgImage;
+
 // ----=  HANDS  =----
 function prepareInteraction() {
-  //bgImage = loadImage('/images/background.png');
+  bgImage = loadImage('/images/background.png');
 }
 
 function drawInteraction(faces, hands) {
@@ -19,9 +21,36 @@ function drawInteraction(faces, hands) {
     // console.log(hand);
     let indexFingerTipX = hand.index_finger_tip.x;
     let indexFingerTipY = hand.index_finger_tip.y;
+
+    let middleFingerMcpX = hand.middle_finger_mcp.x;
+    let middleFingerMcpY = hand.middle_finger_mcp.y;
+
     /*
     Start drawing on the hands here
     */
+   let whatGesture = detectHandGesture(hand)
+
+    if (whatGesture == "Peace") {
+      fill(255, 38, 219) // pink
+    }
+    if (whatGesture == "Thumbs Up") {
+      fill(255, 252, 48) // yellow
+      rect(middleFingerMcpX*2, middleFingerMcpY*2, 100);
+    }
+    if (whatGesture == "Pointing") {
+      fill(0, 255, 0) // green
+    }
+    if (whatGesture == "Open Palm") {
+      fill(0, 255, 255) // cyan
+    }
+
+    if (hand.handedness === "Right") {
+      rect(middleFingerMcpX, middleFingerMcpY, 100)
+    }
+
+    if (hand.handedness === "Left") {
+     ellipse(middleFingerMcpX, middleFingerMcpY, 100)
+    }
 
     // pinchCircle(hand)
     fill(225, 225, 0);
@@ -58,8 +87,46 @@ function drawInteraction(faces, hands) {
     Start drawing on the face here
     */
 
-    // fill(225, 225, 0);
-    // ellipse(leftEyeCenterX, leftEyeCenterY, leftEyeWidth, leftEyeHeight);
+    // Here are some variables you may like to use. 
+    // Face basics
+    let faceCenterX = face.faceOval.centerX;
+    let faceCenterY = face.faceOval.centerY;
+    let faceWidth = face.faceOval.width;
+    let faceheight = face.faceOval.height;
+    // Left eye
+    let leftEyeCenterX = face.leftEye.centerX;
+    let leftEyeCenterY = face.leftEye.centerY;
+    let leftEyeWidth = face.leftEye.width;
+    let leftEyeHeight = face.leftEye.height;
+    // Left eyebrow
+    let leftEyebrowCenterX = face.leftEyebrow.centerX;
+    let leftEyebrowCenterY = face.leftEyebrow.centerY;
+    let leftEyebrowWidth = face.leftEyebrow.width;
+    let leftEyebrowHeight = face.leftEyebrow.height;
+
+    // Lips
+    let lipsCenterX = face.lips.centerX;
+    let lipsCenterY = face.lips.centerY;
+    let lipsWidth = face.lips.width;
+    let lipsHeight = face.lips.height;
+
+    // Right eye
+    let rightEyeCenterX = face.rightEye.centerX;
+    let rightEyeCenterY = face.rightEye.centerY;
+    let rightEyeWidth = face.rightEye.width;
+    let rightEyeHeight = face.rightEye.height;
+
+    // Right eyebrow
+    let rightEyebrowCenterX = face.rightEyebrow.centerX;
+    let rightEyebrowCenterY = face.rightEyebrow.centerY;
+    let rightEyebrowWidth = face.rightEyebrow.width;
+    let rightEyebrowHeight = face.rightEyebrow.height;
+
+    let noseTipX = face.keypoints[4].x;
+    let noseTipY = face.keypoints[4].y;
+
+    fill(225, 225, 0);
+    ellipse(leftEyeCenterX, leftEyeCenterY, leftEyeWidth, leftEyeHeight);
 
     drawPoints(face.leftEye);
     drawPoints(face.leftEyebrow);
