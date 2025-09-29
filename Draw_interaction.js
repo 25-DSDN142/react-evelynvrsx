@@ -1,8 +1,14 @@
 let bgImage;
-
+let thumbsImage;
+let approvedImage;
+let glassesImage;
+let isPointing = false;
 // ----=  HANDS  =----
 function prepareInteraction() {
   bgImage = loadImage('/images/background.png');
+  thumbsImage = loadImage('/images/thumbs_up.png');
+  approvedImage = loadImage('/images/approved_bg.png');
+  glassesImage = loadImage('/images/glasses.png');
 }
 
 function drawInteraction(faces, hands) {
@@ -30,26 +36,29 @@ function drawInteraction(faces, hands) {
     */
    let whatGesture = detectHandGesture(hand)
 
-    if (whatGesture == "Peace") {
-      fill(255, 38, 219) // pink
-    }
+    // if (whatGesture == "Peace") {
+    //   fill(255, 38, 219) // pink
+    // }
     if (whatGesture == "Thumbs Up") {
-      fill(255, 252, 48) // yellow
-      rect(middleFingerMcpX*2, middleFingerMcpY*2, 100);
+      image(thumbsImage, middleFingerMcpX, middleFingerMcpY, 200, 200);
+      image(approvedImage, 0, 0, width/5, height/5);
     }
     if (whatGesture == "Pointing") {
-      fill(0, 255, 0) // green
+      // Draw glasses on all detected faces when pointing gesture is detected
+      isPointing = true;
+    }else{
+      isPointing = false;
     }
-    if (whatGesture == "Open Palm") {
-      fill(0, 255, 255) // cyan
-    }
+    // if (whatGesture == "Open Palm") {
+    //   fill(0, 255, 255) // cyan
+    // }
 
     if (hand.handedness === "Right") {
-      rect(middleFingerMcpX, middleFingerMcpY, 100)
+      //rect(middleFingerMcpX, middleFingerMcpY, 100)
     }
 
     if (hand.handedness === "Left") {
-     ellipse(middleFingerMcpX, middleFingerMcpY, 100)
+     //ellipse(middleFingerMcpX, middleFingerMcpY, 100)
     }
 
     // pinchCircle(hand)
@@ -127,12 +136,13 @@ function drawInteraction(faces, hands) {
 
     fill(225, 225, 0);
     ellipse(leftEyeCenterX, leftEyeCenterY, leftEyeWidth, leftEyeHeight);
-
+    if (isPointing) {
     drawPoints(face.leftEye);
     drawPoints(face.leftEyebrow);
     drawPoints(face.lips);
     drawPoints(face.rightEye);
     drawPoints(face.rightEyebrow);
+    }
     /*
     Stop drawing on the face here
     */
@@ -140,6 +150,18 @@ function drawInteraction(faces, hands) {
   }
   //------------------------------------------------------
   // You can make addtional elements here, but keep the face drawing inside the for loop. 
+
+}
+
+function areTheseTouching(x1, y1, x2, y2, threshhold) {
+  let d = dist(x1, y1, x2, y2)
+
+  if (d < threshhold) {
+    return true;
+  } 
+  else {
+    return false;
+  }
 }
 
 
